@@ -43,7 +43,7 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222.2 84% 2%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -59,7 +59,7 @@ body {
     --accent-foreground: 35 100% 15%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
+    --border: 0 0% 75%;
     --input: 217.2 32.6% 17.5%;
     --ring: 200 80% 55%;
     --chart-1: 220 70% 50%;
