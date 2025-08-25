@@ -4,11 +4,12 @@ import { useState } from 'react';
 import type { Email, ProvideFeedbackOutput, UserClassification } from '@/types/phish-defender';
 import { provideFeedback } from '@/ai/flows/provide-feedback';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Feedback } from './Feedback';
 import { Shield, TriangleAlert, User, Mail } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 import { LoadingSpinner } from './LoadingSpinner';
+import ReactMarkdown from 'react-markdown';
 
 interface EmailCardProps {
   email: Email;
@@ -59,7 +60,22 @@ export function EmailCard({ email, onMark }: EmailCardProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm whitespace-pre-wrap font-code bg-secondary/50 p-4 rounded-md">{email.body}</p>
+        <div className="text-sm whitespace-pre-wrap font-code bg-secondary/50 p-4 rounded-md">
+         <ReactMarkdown
+            className="prose prose-sm dark:prose-invert max-w-none"
+            components={{
+              code({node, inline, className, children, ...props}) {
+                return (
+                  <code className="font-code bg-muted text-muted-foreground rounded-sm px-1 py-0.5" {...props}>
+                    {children}
+                  </code>
+                )
+              }
+            }}
+          >
+            {email.body}
+          </ReactMarkdown>
+        </div>
         {feedback && (
           <Feedback isCorrect={feedback.isCorrect} feedbackText={feedback.feedback} />
         )}

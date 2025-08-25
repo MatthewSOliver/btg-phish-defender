@@ -17,7 +17,23 @@ export function Feedback({ isCorrect, feedbackText }: FeedbackProps) {
       )}
       <AlertTitle className={isCorrect ? '!text-primary' : ''}>{isCorrect ? "Correct!" : "Incorrect"}</AlertTitle>
       <AlertDescription asChild>
-        <ReactMarkdown className="prose prose-sm dark:prose-invert">
+        <ReactMarkdown 
+          className="prose prose-sm dark:prose-invert"
+          components={{
+            code({node, inline, className, children, ...props}) {
+              const match = /language-(\w+)/.exec(className || '')
+              return !inline ? (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              ) : (
+                <code className="font-code bg-muted text-muted-foreground rounded-sm px-1 py-0.5" {...props}>
+                  {children}
+                </code>
+              )
+            }
+          }}
+        >
           {feedbackText}
         </ReactMarkdown>
       </AlertDescription>
