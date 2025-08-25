@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -78,10 +79,13 @@ export default function Home() {
   }, [gameState, gameConfig, toast]);
 
   useEffect(() => {
-    if (processedCount === emails.length && emails.length > 0) {
-      setGameState('round-finished');
+    if (gameState === 'playing' && processedCount === emails.length && emails.length > 0) {
+      const timer = setTimeout(() => {
+        setGameState('round-finished');
+      }, 2000); // 2 second delay
+      return () => clearTimeout(timer);
     }
-  }, [processedCount, emails.length]);
+  }, [processedCount, emails.length, gameState]);
 
   const handleMarkEmail = (isCorrect: boolean) => {
     if (isCorrect) {
@@ -127,7 +131,7 @@ export default function Home() {
             />
             
             {(gameState === 'round-finished' || gameState === 'game-finished') && (
-              <div className="text-center p-8 bg-card rounded-lg shadow-lg">
+              <div className="text-center p-8 bg-card rounded-lg shadow-lg animate-in fade-in duration-500">
                 <h2 className="text-2xl font-bold text-primary mb-2">
                   {gameState === 'game-finished' ? "Congratulations!" : `Round ${currentRound} Complete!`}
                 </h2>
