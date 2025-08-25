@@ -40,11 +40,11 @@ export async function summarizePerformance(input: SummarizePerformanceInput): Pr
 
 const summarizePerformancePrompt = ai.definePrompt({
   name: 'summarizePerformancePrompt',
-  input: {schema: SummarizePerformanceInputSchema},
+  input: {schema: z.object({ gameHistory: z.string() })},
   output: {schema: SummarizePerformanceOutputSchema},
   prompt: `You are an expert security analyst reviewing a user's performance in a phishing detection game.
   
-  Analyze the user's answers provided below. The data is an array of objects, where each object contains the original email, the user's classification ('Safe' or 'Phishing'), and whether their answer was correct.
+  Analyze the user's answers provided below. The data is a JSON string representing an array of objects, where each object contains the original email, the user's classification ('Safe' or 'Phishing'), and whether their answer was correct.
   
   Your task is to provide a concise, insightful summary of their performance in markdown format. 
   
@@ -60,7 +60,7 @@ const summarizePerformancePrompt = ai.definePrompt({
   - Do not reference the JSON structure directly in your output. Just provide the analysis.
   
   User's Game History:
-  {{{jsonStringify this}}}
+  {{{gameHistory}}}
   `,
 });
 
@@ -71,7 +71,7 @@ const summarizePerformanceFlow = ai.defineFlow(
     outputSchema: SummarizePerformanceOutputSchema,
   },
   async input => {
-    const {output} = await summarizePerformancePrompt(input);
+    const {output} = await summarizePerformancePrompt({ gameHistory: JSON.stringify(input) });
     return output!;
   }
 );
