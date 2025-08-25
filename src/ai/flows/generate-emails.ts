@@ -36,38 +36,27 @@ const generateEmailsPrompt = ai.definePrompt({
   name: 'generateEmailsPrompt',
   input: {schema: GenerateEmailsInputSchema},
   output: {schema: GenerateEmailsOutputSchema},
-  prompt: `You are an expert in identifying and generating phishing and safe emails.
+  prompt: `You are an expert in creating subtle phishing emails and realistic safe emails for a security awareness game.
 
-  Generate a list of emails in JSON format. The number of emails to generate is determined by the input field 'numberOfEmails'.
-  Ensure that roughly half of the emails are phishing attempts and the other half are safe.
+  Generate a list of emails in JSON format. The number of emails is determined by 'numberOfEmails'. Roughly half should be phishing, half should be safe.
 
-  Each email object in the JSON array should have the following fields:
-  - sender: The sender of the email.
-  - subject: The subject line of the email.
-  - body: The body content of the email.
-  - isPhishing: A boolean value indicating whether the email is a phishing attempt (true) or safe (false).
+  **Phishing Email Guidelines:**
+  - **Avoid obvious sender names.** Do not use domains like 'badactor.com' or 'phishing.com'.
+  - **Use subtle tactics for sender addresses:**
+    - **Misspellings:** e.g., 'support@paypa1.com' instead of 'support@paypal.com'.
+    - **Subdomain tricks:** e.g., 'login.microsoft.com@customdomain.com'.
+    - **Slight variations of real domains:** e.g., '@google-support.net' instead of a real Google domain.
+    - **Shortened or generic domains:** For a fake 'Daily Tea' newspaper, the phishing domain could be '@dt.com' or '@dailytea-news.com'.
+  - **Body Content:** Incorporate common phishing markers like suspicious links, urgent requests, and generic greetings, but make them believable.
 
-  Incorporate common phishing markers into the phishing emails, such as suspicious links, urgent requests, and generic greetings.
-  Safe emails should appear legitimate and trustworthy.
+  **Safe Email Guidelines:**
+  - **Create realistic sender identities.** Invent plausible company or service names (e.g., 'The Daily Tea' newspaper, 'QuickCart Online Store').
+  - **Use legitimate-looking domains.** For an invented company 'The Daily Tea', the safe domain should be something like '@daily-tea.com' or '@dailyt.co'.
+  - **Avoid using '@example.com'.**
+  - **Body Content:** The content should appear legitimate, trustworthy, and relevant to the sender.
 
   Here's the number of emails to generate: {{{numberOfEmails}}}
   Ensure the output is a valid JSON array of email objects.
-
-  Example of the JSON output format:
-  [
-    {
-      "sender": "john.doe@example.com",
-      "subject": "Important Update",
-      "body": "Dear Customer, ...",
-      "isPhishing": false
-    },
-    {
-      "sender": "support@badactor.com",
-      "subject": "URGENT: Account Suspension",
-      "body": "Your account will be suspended unless ...",
-      "isPhishing": true
-    }
-  ]
   `,
 });
 
@@ -82,3 +71,5 @@ const generateEmailsFlow = ai.defineFlow(
     return output!;
   }
 );
+
+    
