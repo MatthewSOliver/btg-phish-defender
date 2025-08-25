@@ -140,7 +140,8 @@ export default function Home() {
                   <Button onClick={restartGame}>Play Again</Button>
                 ) : (
                   <Button onClick={nextRound}>
-                    Next Round <ArrowRight className="ml-2 h-4 w-4" />
+                    {currentRound === gameConfig.numberOfRounds ? 'Finish Game' : 'Next Round'}
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 )}
               </div>
