@@ -93,6 +93,7 @@ export default function Home() {
   const allEmailsProcessed = processedCount === emails.length && emails.length > 0;
 
   const totalEmailsInGame = (gameConfig?.numberOfEmails ?? 0) * (gameConfig?.numberOfRounds ?? 0);
+  const totalProcessedEmails = gameConfig ? processedCount + (currentRound - 1) * gameConfig.numberOfEmails : 0;
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 sm:p-8 md:p-12 bg-background">
@@ -123,7 +124,7 @@ export default function Home() {
             <Scoreboard 
               score={score} 
               total={totalEmailsInGame}
-              processed={processedCount + (currentRound - 1) * gameConfig.numberOfEmails}
+              processed={totalProcessedEmails}
               round={currentRound}
               totalRounds={gameConfig.numberOfRounds}
             />
