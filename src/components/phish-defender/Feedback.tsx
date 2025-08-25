@@ -1,5 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ShieldCheck, TriangleAlert } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
 
 interface FeedbackProps {
   isCorrect: boolean;
@@ -15,8 +16,10 @@ export function Feedback({ isCorrect, feedbackText }: FeedbackProps) {
         <TriangleAlert className="h-4 w-4" />
       )}
       <AlertTitle className={isCorrect ? '!text-primary' : ''}>{isCorrect ? "Correct!" : "Incorrect"}</AlertTitle>
-      <AlertDescription className="prose prose-sm dark:prose-invert">
-        {feedbackText}
+      <AlertDescription asChild>
+        <ReactMarkdown className="prose prose-sm dark:prose-invert">
+          {feedbackText}
+        </ReactMarkdown>
       </AlertDescription>
     </Alert>
   );
