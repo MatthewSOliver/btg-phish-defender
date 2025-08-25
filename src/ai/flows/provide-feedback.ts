@@ -1,4 +1,4 @@
-// This file uses server-side code, so mark it with 'use server'
+// This file uses server-side code, so mark it with 'use server';
 'use server';
 
 /**
@@ -51,6 +51,11 @@ Body: {{{email.body}}}
 User Classification: {{{userClassification}}}
 
 Analyze the email for phishing indicators such as suspicious links, unusual sender addresses, grammatical errors, urgent or threatening language, and requests for sensitive information. Compare your analysis to the user's classification and provide a detailed explanation in the feedback.
+
+**Formatting Guidelines:**
+- When referring to specific parts of the email content, like the sender address or a phrase from the body, enclose them in backticks (\`like this\`).
+- Use bold markdown (\`**like this**\`) to highlight key concepts or takeaways, such as "**suspicious link**" or "**urgency**".
+- Do not use single quotes ('') for emphasis.
 
 Ensure that your analysis is accurate, detailed, and educational. If the user's classification was correct, reinforce their understanding. If it was incorrect, explain the correct classification and the reasoning behind it.
 
