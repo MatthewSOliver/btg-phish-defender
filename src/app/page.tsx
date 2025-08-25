@@ -10,9 +10,10 @@ import { LoadingSpinner } from '@/components/phish-defender/LoadingSpinner';
 import { PhishDefenderLogo } from '@/components/phish-defender/PhishDefenderLogo';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { RefreshCw, ArrowRight } from 'lucide-react';
+import { RefreshCw, ArrowRight, BarChart2 } from 'lucide-react';
 import { GameSettings } from '@/components/phish-defender/GameSettings';
-import type { GameConfig } from '@/types/phish-defender';
+import type { GameConfig, UserAnswer } from '@/types/phish-defender';
+import { SummaryDialog } from '@/components/phish-defender/SummaryDialog';
 
 type GameState = 'settings' | 'loading' | 'playing' | 'round-finished' | 'game-finished';
 
@@ -23,12 +24,15 @@ export default function Home() {
   const [gameState, setGameState] = useState<GameState>('settings');
   const [gameConfig, setGameConfig] = useState<GameConfig | null>(null);
   const [currentRound, setCurrentRound] = useState(1);
+  const [gameHistory, setGameHistory] = useState<UserAnswer[]>([]);
+  const [isSummaryDialogOpen, setIsSummaryDialogOpen] = useState(false);
   const { toast } = useToast();
 
   const startNewGame = (config: GameConfig) => {
     setGameConfig(config);
     setScore(0);
     setCurrentRound(1);
+    setGameHistory([]);
     setGameState('loading');
   };
 
@@ -78,11 +82,12 @@ export default function Home() {
     fetchEmails();
   }, [gameState, gameConfig, toast]);
 
-  const handleMarkEmail = (isCorrect: boolean) => {
+  const handleMarkEmail = (email: Email, userClassification: 'Safe' | 'Phishing', isCorrect: boolean) => {
     if (isCorrect) {
       setScore(prev => prev + 1);
     }
     setProcessedCount(prev => prev + 1);
+    setGameHistory(prev => [...prev, { email, userClassification, isCorrect }]);
   };
   
   const allEmailsProcessed = processedCount === emails.length && emails.length > 0;
@@ -134,7 +139,13 @@ export default function Home() {
                     : `You scored ${score} so far. Ready for the next round?`}
                 </p>
                 {gameState === 'game-finished' ? (
-                  <Button onClick={restartGame}>Play Again</Button>
+                  <div className="flex justify-center gap-4">
+                    <Button onClick={restartGame}>Play Again</Button>
+                    <Button variant="secondary" onClick={() => setIsSummaryDialogOpen(true)}>
+                      <BarChart2 className="mr-2 h-4 w-4" />
+                      View Summary
+                    </Button>
+                  </div>
                 ) : (
                   <Button onClick={nextRound}>
                     {currentRound === gameConfig.numberOfRounds ? 'Finish Game' : 'Next Round'}
@@ -162,6 +173,11 @@ export default function Home() {
           </>
         )}
       </div>
+       <SummaryDialog 
+          isOpen={isSummaryDialogOpen}
+          onOpenChange={setIsSummaryDialogOpen}
+          gameHistory={gameHistory}
+       />
     </main>
   );
 }

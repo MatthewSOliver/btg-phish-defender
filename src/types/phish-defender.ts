@@ -15,3 +15,10 @@ export interface GameConfig {
   numberOfEmails: number;
   numberOfRounds: number;
 }
+
+// Defines the structure for a user's answer
+export interface UserAnswer {
+    email: Omit<Email, 'id'>;
+    userClassification: UserClassification;
+    isCorrect: boolean;
+}

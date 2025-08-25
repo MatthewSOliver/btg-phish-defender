@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import type { Email, ProvideFeedbackOutput, UserClassification } from '@/types/phish-defender';
+import type { Email, UserClassification } from '@/types/phish-defender';
 import { provideFeedback } from '@/ai/flows/provide-feedback';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,12 +13,12 @@ import ReactMarkdown from 'react-markdown';
 
 interface EmailCardProps {
   email: Email;
-  onMark: (isCorrect: boolean) => void;
+  onMark: (email: Email, userClassification: UserClassification, isCorrect: boolean) => void;
 }
 
 export function EmailCard({ email, onMark }: EmailCardProps) {
   const [classification, setClassification] = useState<UserClassification | null>(null);
-  const [feedback, setFeedback] = useState<ProvideFeedbackOutput | null>(null);
+  const [feedback, setFeedback] = useState<{ isCorrect: boolean, feedback: string } | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
 
@@ -31,7 +31,7 @@ export function EmailCard({ email, onMark }: EmailCardProps) {
     try {
       const result = await provideFeedback({ email, userClassification });
       setFeedback(result);
-      onMark(result.isCorrect);
+      onMark(email, userClassification, result.isCorrect);
     } catch (error) {
       console.error("Error providing feedback:", error);
       toast({
