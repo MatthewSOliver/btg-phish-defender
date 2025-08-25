@@ -9,3 +9,9 @@ export type ProvideFeedbackOutput = AIFeedback;
 
 // Defines the possible classifications a user can make
 export type UserClassification = 'Safe' | 'Phishing';
+
+// Defines the configuration for a game session
+export interface GameConfig {
+  numberOfEmails: number;
+  numberOfRounds: number;
+}
