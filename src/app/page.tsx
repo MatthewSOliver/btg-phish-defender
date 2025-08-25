@@ -78,21 +78,14 @@ export default function Home() {
     fetchEmails();
   }, [gameState, gameConfig, toast]);
 
-  useEffect(() => {
-    if (gameState === 'playing' && processedCount === emails.length && emails.length > 0) {
-      const timer = setTimeout(() => {
-        setGameState('round-finished');
-      }, 2000); // 2 second delay
-      return () => clearTimeout(timer);
-    }
-  }, [processedCount, emails.length, gameState]);
-
   const handleMarkEmail = (isCorrect: boolean) => {
     if (isCorrect) {
       setScore(prev => prev + 1);
     }
     setProcessedCount(prev => prev + 1);
   };
+  
+  const allEmailsProcessed = processedCount === emails.length && emails.length > 0;
 
   const totalEmailsInGame = (gameConfig?.numberOfEmails ?? 0) * (gameConfig?.numberOfRounds ?? 0);
 
@@ -157,6 +150,14 @@ export default function Home() {
                   <EmailCard key={email.id} email={email} onMark={handleMarkEmail} />
                 ))}
               </div>
+            )}
+             {gameState === 'playing' && allEmailsProcessed && (
+                <div className="flex justify-center pt-4">
+                    <Button onClick={() => setGameState('round-finished')}>
+                    Continue
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
             )}
           </>
         )}
