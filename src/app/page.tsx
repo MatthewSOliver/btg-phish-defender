@@ -14,6 +14,7 @@ import { RefreshCw, ArrowRight, BarChart2 } from 'lucide-react';
 import { GameSettings } from '@/components/phish-defender/GameSettings';
 import type { GameConfig, UserAnswer } from '@/types/phish-defender';
 import { SummaryDialog } from '@/components/phish-defender/SummaryDialog';
+import { Confetti } from '@/components/phish-defender/Confetti';
 
 type GameState = 'settings' | 'loading' | 'playing' | 'round-finished' | 'game-finished';
 
@@ -97,6 +98,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 sm:p-8 md:p-12 bg-background">
+      {gameState === 'game-finished' && <Confetti />}
       <div className="w-full max-w-4xl space-y-8">
         <header className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <PhishDefenderLogo />
