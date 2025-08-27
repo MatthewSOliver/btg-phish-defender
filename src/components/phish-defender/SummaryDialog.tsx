@@ -55,7 +55,7 @@ export function SummaryDialog({ isOpen, onOpenChange, gameHistory }: SummaryDial
         <DialogHeader>
           <DialogTitle>Your Performance Summary</DialogTitle>
           <DialogDescription>
-            Here's an AI-powered analysis of your performance in the game.
+            Here's an analysis of your performance
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4 max-h-[60vh] overflow-y-auto pr-2">
