@@ -14,6 +14,7 @@ export type UserClassification = 'Safe' | 'Phishing';
 export interface GameConfig {
   numberOfEmails: number;
   numberOfRounds: number;
+  colorblindMode: boolean;
 }
 
 // Defines the structure for a user's answer

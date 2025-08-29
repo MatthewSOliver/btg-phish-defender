@@ -76,6 +76,16 @@ body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  .dark.colorblind {
+    --primary: 217 91% 60%; /* Blue */
+    --primary-foreground: 210 40% 98%;
+    --accent: 39 91% 55%; /* Orange/Yellow */
+    --accent-foreground: 39 100% 15%;
+    --destructive: 39 91% 55%; /* Orange/Yellow for phishing/incorrect */
+    --destructive-foreground: 39 100% 15%;
+    --ring: 217 91% 60%;
+  }
 }
 
 @layer base {

@@ -23,11 +23,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import { Zap } from "lucide-react";
 
 const formSchema = z.object({
   numberOfEmails: z.number().min(1).max(10),
   numberOfRounds: z.number().min(1).max(5),
+  colorblindMode: z.boolean(),
 });
 
 interface GameSettingsProps {
@@ -40,6 +42,7 @@ export function GameSettings({ onStartGame }: GameSettingsProps) {
     defaultValues: {
       numberOfEmails: 5,
       numberOfRounds: 3,
+      colorblindMode: false,
     },
   });
 
@@ -99,6 +102,28 @@ export function GameSettings({ onStartGame }: GameSettingsProps) {
                     Select the total number of rounds for this game.
                   </FormDescription>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="colorblindMode"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">
+                      Colorblind Mode
+                    </FormLabel>
+                    <FormDescription>
+                      Adjust colors for better visibility.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />

@@ -27,10 +27,20 @@ export default function Home() {
   const [currentRound, setCurrentRound] = useState(1);
   const [gameHistory, setGameHistory] = useState<UserAnswer[]>([]);
   const [isSummaryDialogOpen, setIsSummaryDialogOpen] = useState(false);
+  const [isColorblindMode, setIsColorblindMode] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (isColorblindMode) {
+      document.documentElement.classList.add('colorblind');
+    } else {
+      document.documentElement.classList.remove('colorblind');
+    }
+  }, [isColorblindMode]);
 
   const startNewGame = (config: GameConfig) => {
     setGameConfig(config);
+    setIsColorblindMode(config.colorblindMode);
     setScore(0);
     setCurrentRound(1);
     setGameHistory([]);
