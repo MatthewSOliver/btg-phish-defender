@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,27 +30,39 @@ import { Zap } from "lucide-react";
 const formSchema = z.object({
   numberOfEmails: z.number().min(1).max(10),
   numberOfRounds: z.number().min(1).max(5),
-  colorblindMode: z.boolean(),
-  highContrastMode: z.boolean(),
 });
+
+type FormValues = z.infer<typeof formSchema>;
 
 interface GameSettingsProps {
   onStartGame: (config: GameConfig) => void;
+  isColorblindMode: boolean;
+  onColorblindModeChange: (value: boolean) => void;
+  isHighContrastMode: boolean;
+  onHighContrastModeChange: (value: boolean) => void;
 }
 
-export function GameSettings({ onStartGame }: GameSettingsProps) {
-  const form = useForm<z.infer<typeof formSchema>>({
+export function GameSettings({ 
+  onStartGame,
+  isColorblindMode,
+  onColorblindModeChange,
+  isHighContrastMode,
+  onHighContrastModeChange 
+}: GameSettingsProps) {
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       numberOfEmails: 5,
       numberOfRounds: 3,
-      colorblindMode: false,
-      highContrastMode: false,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    onStartGame(values);
+  function onSubmit(values: FormValues) {
+    onStartGame({
+      ...values,
+      colorblindMode: isColorblindMode,
+      highContrastMode: isHighContrastMode,
+    });
   }
 
   return (
@@ -107,50 +120,38 @@ export function GameSettings({ onStartGame }: GameSettingsProps) {
                 </FormItem>
               )}
             />
-             <FormField
-              control={form.control}
-              name="colorblindMode"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
-                      Colorblind Mode
-                    </FormLabel>
-                    <FormDescription>
-                      Adjust colors for better visibility.
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="highContrastMode"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
-                      High Contrast Mode
-                    </FormLabel>
-                    <FormDescription>
-                      Increase contrast for better readability.
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">
+                  Colorblind Mode
+                </FormLabel>
+                <FormDescription>
+                  Adjust colors for better visibility.
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={isColorblindMode}
+                  onCheckedChange={onColorblindModeChange}
+                />
+              </FormControl>
+            </FormItem>
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">
+                  High Contrast Mode
+                </FormLabel>
+                <FormDescription>
+                  Increase contrast for better readability.
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={isHighContrastMode}
+                  onCheckedChange={onHighContrastModeChange}
+                />
+              </FormControl>
+            </FormItem>
           </CardContent>
           <CardFooter>
             <Button type="submit" className="w-full">

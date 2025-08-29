@@ -38,8 +38,7 @@ export default function Home() {
 
   const startNewGame = (config: GameConfig) => {
     setGameConfig(config);
-    setIsColorblindMode(config.colorblindMode);
-    setIsHighContrastMode(config.highContrastMode);
+    // Accessibility modes are already set from the toggles
     setScore(0);
     setCurrentRound(1);
     setGameHistory([]);
@@ -119,7 +118,15 @@ export default function Home() {
           )}
         </header>
 
-        {gameState === 'settings' && <GameSettings onStartGame={startNewGame} />}
+        {gameState === 'settings' && (
+          <GameSettings 
+            onStartGame={startNewGame} 
+            isColorblindMode={isColorblindMode}
+            onColorblindModeChange={setIsColorblindMode}
+            isHighContrastMode={isHighContrastMode}
+            onHighContrastModeChange={setIsHighContrastMode}
+          />
+        )}
         
         {gameState === 'loading' && (
           <div className="flex flex-col justify-center items-center py-20">
