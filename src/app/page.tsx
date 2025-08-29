@@ -32,13 +32,41 @@ export default function Home() {
   const { toast } = useToast();
 
   useEffect(() => {
+    try {
+      const storedColorblind = localStorage.getItem('phishdefender-colorblindMode');
+      if (storedColorblind) {
+        setIsColorblindMode(JSON.parse(storedColorblind));
+      }
+      const storedHighContrast = localStorage.getItem('phishdefender-highContrastMode');
+      if (storedHighContrast) {
+        setIsHighContrastMode(JSON.parse(storedHighContrast));
+      }
+    } catch (error) {
+      console.error("Failed to read accessibility settings from localStorage", error);
+    }
+  }, []);
+
+  useEffect(() => {
     document.documentElement.classList.toggle('colorblind', isColorblindMode);
     document.documentElement.classList.toggle('high-contrast', isHighContrastMode);
-  }, [isColorblindMode, isHighContrastMode]);
+    try {
+      localStorage.setItem('phishdefender-colorblindMode', JSON.stringify(isColorblindMode));
+    } catch (error) {
+      console.error("Failed to save colorblind mode to localStorage", error);
+    }
+  }, [isColorblindMode]);
+  
+  useEffect(() => {
+    document.documentElement.classList.toggle('high-contrast', isHighContrastMode);
+    try {
+      localStorage.setItem('phishdefender-highContrastMode', JSON.stringify(isHighContrastMode));
+    } catch (error) {
+      console.error("Failed to save high contrast mode to localStorage", error);
+    }
+  }, [isHighContrastMode]);
 
   const startNewGame = (config: GameConfig) => {
     setGameConfig(config);
-    // Accessibility modes are already set from the toggles
     setScore(0);
     setCurrentRound(1);
     setGameHistory([]);

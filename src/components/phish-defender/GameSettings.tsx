@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -42,6 +43,32 @@ interface GameSettingsProps {
   onHighContrastModeChange: (value: boolean) => void;
 }
 
+const getDefaultValues = (): FormValues => {
+  if (typeof window === 'undefined') {
+    return {
+      numberOfEmails: 5,
+      numberOfRounds: 3,
+    };
+  }
+  try {
+    const storedValues = localStorage.getItem('phishdefender-gameSettings');
+    if (storedValues) {
+      const parsed = JSON.parse(storedValues);
+      // Validate parsed values against schema
+      const result = formSchema.safeParse(parsed);
+      if (result.success) {
+        return result.data;
+      }
+    }
+  } catch (error) {
+    console.error("Failed to read game settings from localStorage", error);
+  }
+  return {
+    numberOfEmails: 5,
+    numberOfRounds: 3,
+  };
+};
+
 export function GameSettings({ 
   onStartGame,
   isColorblindMode,
@@ -51,11 +78,18 @@ export function GameSettings({
 }: GameSettingsProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      numberOfEmails: 5,
-      numberOfRounds: 3,
-    },
+    defaultValues: getDefaultValues(),
   });
+
+  const watchedValues = form.watch();
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('phishdefender-gameSettings', JSON.stringify(watchedValues));
+    } catch (error) {
+      console.error("Failed to save game settings to localStorage", error);
+    }
+  }, [watchedValues]);
 
   function onSubmit(values: FormValues) {
     onStartGame({
