@@ -30,6 +30,7 @@ const formSchema = z.object({
   numberOfEmails: z.number().min(1).max(10),
   numberOfRounds: z.number().min(1).max(5),
   colorblindMode: z.boolean(),
+  highContrastMode: z.boolean(),
 });
 
 interface GameSettingsProps {
@@ -43,6 +44,7 @@ export function GameSettings({ onStartGame }: GameSettingsProps) {
       numberOfEmails: 5,
       numberOfRounds: 3,
       colorblindMode: false,
+      highContrastMode: false,
     },
   });
 
@@ -116,6 +118,28 @@ export function GameSettings({ onStartGame }: GameSettingsProps) {
                     </FormLabel>
                     <FormDescription>
                       Adjust colors for better visibility.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="highContrastMode"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">
+                      High Contrast Mode
+                    </FormLabel>
+                    <FormDescription>
+                      Increase contrast for better readability.
                     </FormDescription>
                   </div>
                   <FormControl>

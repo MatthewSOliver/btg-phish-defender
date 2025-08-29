@@ -28,19 +28,18 @@ export default function Home() {
   const [gameHistory, setGameHistory] = useState<UserAnswer[]>([]);
   const [isSummaryDialogOpen, setIsSummaryDialogOpen] = useState(false);
   const [isColorblindMode, setIsColorblindMode] = useState(false);
+  const [isHighContrastMode, setIsHighContrastMode] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    if (isColorblindMode) {
-      document.documentElement.classList.add('colorblind');
-    } else {
-      document.documentElement.classList.remove('colorblind');
-    }
-  }, [isColorblindMode]);
+    document.documentElement.classList.toggle('colorblind', isColorblindMode);
+    document.documentElement.classList.toggle('high-contrast', isHighContrastMode);
+  }, [isColorblindMode, isHighContrastMode]);
 
   const startNewGame = (config: GameConfig) => {
     setGameConfig(config);
     setIsColorblindMode(config.colorblindMode);
+    setIsHighContrastMode(config.highContrastMode);
     setScore(0);
     setCurrentRound(1);
     setGameHistory([]);

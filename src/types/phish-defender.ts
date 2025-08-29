@@ -15,6 +15,7 @@ export interface GameConfig {
   numberOfEmails: number;
   numberOfRounds: number;
   colorblindMode: boolean;
+  highContrastMode: boolean;
 }
 
 // Defines the structure for a user's answer
